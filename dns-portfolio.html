@@ -4,89 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project 04 — Portfolio Website & DNS Infrastructure | Aayush Acharya</title>
-<style>
-  :root {
-    --bg: #f8f7f4; --surface: #fff; --border: #e5e2db; --text: #1a1a1a; --muted: #6b6860;
-    --accent: #185FA5; --accent-bg: #E6F1FB; --accent-text: #0C447C;
-    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
-    --amber: #854F0B; --amber-bg: #FAEEDA; --amber-text: #633806;
-    --purple: #534AB7; --purple-bg: #EEEDFE; --purple-text: #3C3489;
-    --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-text: #085041;
-    --radius: 10px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-  a { text-decoration: none; color: inherit; }
-  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 12px; }
-  .back-btn { font-size: 13px; color: var(--accent); font-weight: 500; }
-  .back-btn:hover { text-decoration: underline; }
-  .breadcrumb { font-size: 13px; color: var(--muted); }
-  .hero { background: var(--amber-bg); border-bottom: 1px solid #f0c870; padding: 32px 24px; }
-  .hero-inner { max-width: 860px; margin: 0 auto; }
-  .project-num { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
-  .hero h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; color: var(--amber-text); margin-bottom: 8px; }
-  .hero-sub { font-size: 14px; color: var(--amber-text); opacity: 0.8; margin-bottom: 16px; }
-  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; background: #fff; color: var(--amber-text); border: 1px solid #f0c870; }
-  .tag-live { background: var(--green-bg); color: var(--green-text); border: 1px solid #b8d4a0; }
-  .main { max-width: 860px; margin: 0 auto; padding: 28px 24px 60px; display: grid; grid-template-columns: 1fr 260px; gap: 20px; }
-  @media (max-width: 700px) { .main { grid-template-columns: 1fr; } }
-  .content { min-width: 0; }
-  .sidebar { display: flex; flex-direction: column; gap: 14px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); margin-bottom: 16px; }
-  .card-title { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
-  .card p { font-size: 13px; line-height: 1.7; color: var(--muted); margin-bottom: 8px; }
-  .card p:last-child { margin-bottom: 0; }
-  .card strong { color: var(--text); }
-  .recruiter-box { background: var(--green-bg); border: 1px solid #b8d4a0; border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; }
-  .recruiter-box .label { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
-  .recruiter-box p { font-size: 13px; color: var(--green-text); line-height: 1.7; }
-  .step-item { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; margin-bottom: 8px; box-shadow: var(--shadow); }
-  .step-header { padding: 13px 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; }
-  .step-header:hover { background: var(--bg); }
-  .step-num { background: var(--amber-bg); color: var(--amber-text); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-  .step-title { font-size: 14px; font-weight: 500; flex: 1; }
-  .step-arrow { color: var(--muted); transition: transform 0.2s; font-size: 16px; flex-shrink: 0; }
-  .step-item.open .step-arrow { transform: rotate(90deg); }
-  .step-body { display: none; padding: 0 16px 14px 52px; font-size: 13px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); }
-  .step-item.open .step-body { display: block; }
-  .step-body code { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 12px; color: var(--purple); }
-  .step-body ul { margin: 8px 0 0 16px; }
-  .step-body ul li { margin-bottom: 4px; }
-  .step-body strong { color: var(--text); }
-  .dns-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .dns-table th { background: var(--bg); padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; color: var(--muted); border-bottom: 1px solid var(--border); }
-  .dns-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-family: monospace; font-size: 12px; }
-  .dns-table td.plain { font-family: inherit; font-size: 13px; }
-  .dns-table tr:last-child td { border-bottom: none; }
-  .evidence-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
-  .evidence-item:last-child { border-bottom: none; }
-  .ev-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-  .ev-icon.live { background: var(--green-bg); }
-  .ev-icon.screenshot { background: var(--amber-bg); }
-  .ev-content { flex: 1; }
-  .ev-title { font-size: 13px; font-weight: 600; }
-  .ev-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .ev-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-top: 4px; }
-  .ev-badge.live { background: var(--green-bg); color: var(--green-text); }
-  .ev-badge.pending { background: var(--amber-bg); color: var(--amber-text); }
-  .verify-link { font-size: 12px; color: var(--accent); margin-top: 4px; display: block; }
-  .verify-link:hover { text-decoration: underline; }
-  .skill-pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); margin: 3px 3px 3px 0; }
-  .sidebar .card { margin-bottom: 0; }
-  .live-banner { background: var(--green-bg); border: 1px solid #b8d4a0; border-radius: var(--radius); padding: 12px 16px; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-  .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .live-text { font-size: 13px; color: var(--green-text); font-weight: 500; }
-
-  .lightbox-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; cursor:zoom-out; }
-  .lightbox-overlay.active { display:flex; }
-  .lightbox-overlay img { max-width:92vw; max-height:90vh; border-radius:8px; box-shadow:0 8px 40px rgba(0,0,0,0.6); cursor:default; }
-  .lightbox-close { position:fixed; top:20px; right:24px; color:#fff; font-size:32px; font-weight:300; cursor:pointer; line-height:1; z-index:10000; }
-  .lightbox-caption { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); color:#fff; font-size:13px; background:rgba(0,0,0,0.6); padding:6px 14px; border-radius:6px; white-space:nowrap; max-width:90vw; text-align:center; }
-  .proof-img { width:100%; border-radius:8px; border:1px solid var(--border); cursor:zoom-in; transition:opacity 0.15s; display:block; }
-  .proof-img:hover { opacity:0.88; }
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
