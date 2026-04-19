@@ -59,8 +59,10 @@
   .dns-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-family: monospace; font-size: 12px; }
   .dns-table td.plain { font-family: inherit; font-size: 13px; }
   .dns-table tr:last-child td { border-bottom: none; }
+  .verify-link:hover { text-decoration: underline; }
   .skill-pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); margin: 3px 3px 3px 0; }
-  .sidebar .card { margin-bottom: 0; } 50%{opacity:0.4} }
+  .sidebar .card { margin-bottom: 0; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 </style>
 </head>
 <body>
@@ -81,13 +83,14 @@
       <span class="tag">A Records</span>
       <span class="tag">CNAMEs</span>
       <span class="tag">HTTPS</span>
+      <span class="tag tag-live">Live & Verifiable Now</span>
     </div>
   </div>
 </div>
 
 <div class="main">
   <div class="content">
-    </div>
+
 
     <div class="recruiter-box">
       <div class="label">What this proves — 30 second summary</div>
@@ -220,10 +223,6 @@
     </div>
 
 
-
-
-    </div>
-
   </div>
 
   <div class="sidebar">
@@ -243,7 +242,8 @@
       <span class="skill-pill">Web Deployment</span>
     </div>
     <div class="card">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Verify live:</p>
+      <div class="card-title">Verify Right Now</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">No screenshots needed — check these live:</p>
       <a href="https://aayushacharya.com.au" target="_blank" style="display:block;font-size:13px;color:var(--accent);margin-bottom:6px;">→ aayushacharya.com.au</a>
       <a href="https://mxtoolbox.com/SuperTool.aspx?action=a%3aaayushacharya.com.au" target="_blank" style="display:block;font-size:13px;color:var(--accent);margin-bottom:6px;">→ DNS lookup (MxToolbox)</a>
       <a href="https://github.com/hi-its-aayush" target="_blank" style="display:block;font-size:13px;color:var(--accent);">→ GitHub source code</a>
