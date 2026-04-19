@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aayush Acharya — IT Projects Portfolio</title>
+<style>
+  :root {
+    --bg: #f8f7f4; --surface: #fff; --border: #e5e2db; --text: #1a1a1a; --muted: #6b6860;
+    --accent: #185FA5; --accent-bg: #E6F1FB; --accent-text: #0C447C;
+    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
+    --amber: #854F0B; --amber-bg: #FAEEDA; --amber-text: #633806;
+    --purple: #534AB7; --purple-bg: #EEEDFE; --purple-text: #3C3489;
+    --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-text: #085041;
+    --radius: 12px; --shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  a { text-decoration: none; color: inherit; }
+
+  .hero { background: var(--surface); border-bottom: 1px solid var(--border); padding: 40px 24px 32px; }
+  .hero-inner { max-width: 900px; margin: 0 auto; }
+  .hero-name { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .hero-role { font-size: 15px; color: var(--muted); margin-top: 4px; }
+  .hero-links { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+  .hero-link { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .hero-link:hover { text-decoration: underline; }
+  .stats { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .stat { text-align: left; }
+  .stat-num { font-size: 22px; font-weight: 700; }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 1px; }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 32px 24px 60px; }
+  .section-title { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+
+  .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .projects { grid-template-columns: 1fr; } }
+
+  .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: border-color 0.15s, box-shadow 0.15s; }
+  .project-card:hover { border-color: #c5c0b8; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+
+  .project-icon { font-size: 22px; margin-bottom: 12px; }
+  .project-num { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .project-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+  .project-desc { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; margin-bottom: 14px; }
+  .project-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tag { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; }
+  .tag-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .tag-green { background: var(--green-bg); color: var(--green-text); }
+  .tag-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .tag-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .tag-teal { background: var(--teal-bg); color: var(--teal-text); }
+
+  .view-btn { display: inline-block; padding: 8px 16px; background: var(--accent-bg); color: var(--accent-text); border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; transition: background 0.15s; }
+  .view-btn:hover { background: #c8dff5; }
+
+  .skills-section { margin-top: 32px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin-top: 12px; }
+  .skill-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 500; }
+
+  .recruiter-note { background: var(--amber-bg); border: 1px solid #f0c870; border-radius: var(--radius); padding: 16px 20px; margin-bottom: 24px; font-size: 13px; color: var(--amber-text); line-height: 1.6; }
+  .recruiter-note strong { color: #5a3200; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-name">Aayush Acharya</div>
+    <div class="hero-role">AV & Technical Support Analyst at PwC &nbsp;·&nbsp; Level 1/2 IT Support &nbsp;·&nbsp; Sydney, NSW</div>
+    <div class="hero-links">
+      <a class="hero-link" href="https://aayushacharya.com.au" target="_blank">Portfolio →</a>
+      <a class="hero-link" href="https://linkedin.com/in/aayushacharya" target="_blank">LinkedIn →</a>
+      <a class="hero-link" href="mailto:aayush@aayush.com.au">aayush@aayush.com.au</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Projects</div></div>
+      <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Technologies</div></div>
+      <div class="stat"><div class="stat-num">2+</div><div class="stat-label">Years enterprise experience</div></div>
+      <div class="stat"><div class="stat-num">1</div><div class="stat-label">Live verifiable project</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="recruiter-note">
+    <strong>For recruiters:</strong> Each project page includes a plain-English summary of what was built and why it matters, followed by the technical detail. Every project has a verification section showing what can be independently checked. The DNS/Portfolio project is fully live and verifiable right now.
+  </div>
+
+  <div class="section-title">Technical Projects & Home Lab</div>
+
+  <div class="projects">
+
+    <a href="m365-tenant.html" class="project-card">
+      <div class="project-icon">☁️</div>
+      <div class="project-num">Project 01</div>
+      <div class="project-title">Enterprise M365 E5 Tenant & Zero Trust Infrastructure</div>
+      <div class="project-desc">Built a production-grade Microsoft 365 E5 environment with Entra ID, Intune MDM, Zero Trust Conditional Access, and phishing-resistant MFA — simulating a full enterprise identity and endpoint management stack.</div>
+      <div class="project-tags">
+        <span class="tag tag-blue">Entra ID</span>
+        <span class="tag tag-blue">Intune</span>
+        <span class="tag tag-blue">Autopilot</span>
+        <span class="tag tag-teal">Zero Trust</span>
+        <span class="tag tag-teal">Conditional Access</span>
+      </div>
+      <div class="view-btn">View Project →</div>
+    </a>
+
+    <a href="vlan-design.html" class="project-card">
+      <div class="project-icon">🌐</div>
+      <div class="project-num">Project 02</div>
+      <div class="project-title">Multi-VLAN Network Design</div>
+      <div class="project-desc">Designed and validated a multi-VLAN enterprise network topology in Cisco Packet Tracer — covering inter-VLAN routing, 802.1Q trunking, Layer 3 switching, and per-VLAN DHCP across segmented traffic zones.</div>
+      <div class="project-tags">
+        <span class="tag tag-green">Cisco</span>
+        <span class="tag tag-green">VLANs</span>
+        <span class="tag tag-green">L3 Switching</span>
+        <span class="tag tag-green">802.1Q</span>
+      </div>
+      <div class="view-btn">View Project →</div>
+    </a>
+
+    <a href="virtual-ad-vpn.html" class="project-card">
+      <div class="project-icon">🔐</div>
+      <div class="project-num">Project 03</div>
+      <div class="project-title">Virtual Active Directory & Site-to-Site VPN on Azure</div>
+      <div class="project-desc">Deployed a virtual Active Directory environment on Azure using Windows Server 2022 VMs, configured domain controllers, OUs, and GPOs, then built a site-to-site VPN integrated with Microsoft Entra ID.</div>
+      <div class="project-tags">
+        <span class="tag tag-blue">Azure</span>
+        <span class="tag tag-blue">Active Directory</span>
+        <span class="tag tag-purple">Windows Server</span>
+        <span class="tag tag-purple">GPO</span>
+        <span class="tag tag-teal">VPN</span>
+      </div>
+      <div class="view-btn">View Project →</div>
+    </a>
+
+    <a href="dns-portfolio.html" class="project-card">
+      <div class="project-icon">🌍</div>
+      <div class="project-num">Project 04</div>
+      <div class="project-title">Portfolio Website & DNS Infrastructure</div>
+      <div class="project-desc">Built and deployed a personal portfolio site on GitHub Pages, then configured DNS across three live domains — A records, CNAMEs, and HTTPS — demonstrating practical DNS management and web infrastructure skills.</div>
+      <div class="project-tags">
+        <span class="tag tag-amber">DNS</span>
+        <span class="tag tag-amber">GitHub Pages</span>
+        <span class="tag tag-amber">HTTPS</span>
+        <span class="tag tag-green">Live & Verifiable</span>
+      </div>
+      <div class="view-btn">View Project →</div>
+    </a>
+
+  </div>
+
+  <div class="skills-section">
+    <div class="section-title">Skills Demonstrated Across All Projects</div>
+    <div class="skills-grid">
+      <div class="skill-item">Microsoft Entra ID</div>
+      <div class="skill-item">Microsoft Intune</div>
+      <div class="skill-item">Windows Autopilot</div>
+      <div class="skill-item">Conditional Access</div>
+      <div class="skill-item">Zero Trust</div>
+      <div class="skill-item">Active Directory</div>
+      <div class="skill-item">Windows Server 2022</div>
+      <div class="skill-item">Group Policy (GPO)</div>
+      <div class="skill-item">Microsoft Azure</div>
+      <div class="skill-item">Azure VPN Gateway</div>
+      <div class="skill-item">VLAN Design</div>
+      <div class="skill-item">Inter-VLAN Routing</div>
+      <div class="skill-item">Cisco Packet Tracer</div>
+      <div class="skill-item">802.1Q Trunking</div>
+      <div class="skill-item">DNS Management</div>
+      <div class="skill-item">GitHub Pages</div>
+      <div class="skill-item">HTTPS / SSL</div>
+      <div class="skill-item">Hybrid Cloud</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

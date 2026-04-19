@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 02 — Multi-VLAN Network Design | Aayush Acharya</title>
+<style>
+  :root {
+    --bg: #f8f7f4; --surface: #fff; --border: #e5e2db; --text: #1a1a1a; --muted: #6b6860;
+    --accent: #185FA5; --accent-bg: #E6F1FB; --accent-text: #0C447C;
+    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
+    --amber: #854F0B; --amber-bg: #FAEEDA; --amber-text: #633806;
+    --purple: #534AB7; --purple-bg: #EEEDFE; --purple-text: #3C3489;
+    --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-text: #085041;
+    --radius: 10px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  a { text-decoration: none; color: inherit; }
+  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 12px; }
+  .back-btn { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .back-btn:hover { text-decoration: underline; }
+  .breadcrumb { font-size: 13px; color: var(--muted); }
+  .hero { background: var(--green-bg); border-bottom: 1px solid #b8d4a0; padding: 32px 24px; }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .project-num { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+  .hero h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; color: var(--green-text); margin-bottom: 8px; }
+  .hero-sub { font-size: 14px; color: var(--green-text); opacity: 0.8; margin-bottom: 16px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; background: #fff; color: var(--green-text); border: 1px solid #b8d4a0; }
+  .main { max-width: 860px; margin: 0 auto; padding: 28px 24px 60px; display: grid; grid-template-columns: 1fr 260px; gap: 20px; }
+  @media (max-width: 700px) { .main { grid-template-columns: 1fr; } }
+  .content { min-width: 0; }
+  .sidebar { display: flex; flex-direction: column; gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); margin-bottom: 16px; }
+  .card-title { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .card p { font-size: 13px; line-height: 1.7; color: var(--muted); margin-bottom: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+  .recruiter-box { background: var(--teal-bg); border: 1px solid #9fd4c6; border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; }
+  .recruiter-box .label { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+  .recruiter-box p { font-size: 13px; color: var(--teal-text); line-height: 1.7; }
+  .step-item { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; margin-bottom: 8px; box-shadow: var(--shadow); }
+  .step-header { padding: 13px 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; }
+  .step-header:hover { background: var(--bg); }
+  .step-num { background: var(--green-bg); color: var(--green-text); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .step-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .step-arrow { color: var(--muted); transition: transform 0.2s; font-size: 16px; flex-shrink: 0; }
+  .step-item.open .step-arrow { transform: rotate(90deg); }
+  .step-body { display: none; padding: 0 16px 14px 52px; font-size: 13px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); }
+  .step-item.open .step-body { display: block; }
+  .step-body code { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 12px; color: var(--purple); }
+  .step-body ul { margin: 8px 0 0 16px; }
+  .step-body ul li { margin-bottom: 4px; }
+  .step-body strong { color: var(--text); }
+  .vlan-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .vlan-table th { background: var(--bg); padding: 8px 12px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; color: var(--muted); border-bottom: 1px solid var(--border); }
+  .vlan-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .vlan-table tr:last-child td { border-bottom: none; }
+  .evidence-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .evidence-item:last-child { border-bottom: none; }
+  .ev-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .ev-icon.screenshot { background: var(--amber-bg); }
+  .ev-icon.file { background: var(--green-bg); }
+  .ev-content { flex: 1; }
+  .ev-title { font-size: 13px; font-weight: 600; }
+  .ev-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .ev-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-top: 4px; }
+  .ev-badge.live { background: var(--green-bg); color: var(--green-text); }
+  .ev-badge.pending { background: var(--amber-bg); color: var(--amber-text); }
+  .screenshot-placeholder { background: var(--bg); border: 2px dashed var(--border); border-radius: var(--radius); padding: 24px; text-align: center; margin: 8px 0; }
+  .screenshot-placeholder p { font-size: 12px; color: var(--muted); }
+  .screenshot-placeholder .ph-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .skill-pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); margin: 3px 3px 3px 0; }
+  .sidebar .card { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">← Back to Projects</a>
+  <span class="breadcrumb">/ Project 02</span>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="project-num">Project 02 — Networking</div>
+    <h1>Multi-VLAN Network Design</h1>
+    <div class="hero-sub">Cisco Packet Tracer · VLANs · Inter-VLAN Routing · Layer 3 Switching · 802.1Q Trunking · DHCP · Network Segmentation</div>
+    <div class="tags">
+      <span class="tag">Cisco Packet Tracer</span>
+      <span class="tag">VLANs</span>
+      <span class="tag">Inter-VLAN Routing</span>
+      <span class="tag">Layer 3 Switching</span>
+      <span class="tag">802.1Q Trunking</span>
+      <span class="tag">DHCP</span>
+      <span class="tag">Network Segmentation</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="content">
+
+    <div class="recruiter-box">
+      <div class="label">What this proves — 30 second summary</div>
+      <p>This project demonstrates practical networking knowledge — specifically how enterprise networks are segmented to separate different types of traffic (user data, VoIP, guest Wi-Fi, management). Network segmentation is a core concept in IT support because it affects how users connect, why some devices can't reach others, and how VoIP quality is maintained. Understanding VLANs is expected at L2 and above.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Project Overview</div>
+      <p>Designed a multi-VLAN enterprise network topology in Cisco Packet Tracer, simulating the type of network architecture found in a mid-sized business with multiple departments. The goal was to segment traffic correctly, enable controlled inter-VLAN communication via a Layer 3 switch, and validate that each segment worked as intended.</p>
+      <p>This directly mirrors the Cisco Meraki multi-site network infrastructure I manage professionally — understanding the logical design behind what a tool like Meraki abstracts away is what separates an operator from someone who actually understands what's happening.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">VLAN Architecture Designed</div>
+      <table class="vlan-table">
+        <tr><th>VLAN ID</th><th>Name</th><th>Subnet</th><th>Purpose</th></tr>
+        <tr><td>VLAN 1</td><td>Management</td><td>192.168.1.0/24</td><td>Switch/router management access only</td></tr>
+        <tr><td>VLAN 10</td><td>Data</td><td>192.168.10.0/24</td><td>User PCs, laptops, workstations</td></tr>
+        <tr><td>VLAN 20</td><td>VoIP</td><td>192.168.20.0/24</td><td>IP phones — isolated for QoS</td></tr>
+        <tr><td>VLAN 30</td><td>Servers</td><td>192.168.30.0/24</td><td>File servers, print servers — restricted access</td></tr>
+        <tr><td>VLAN 40</td><td>Guest</td><td>192.168.40.0/24</td><td>Guest Wi-Fi — internet only, no internal access</td></tr>
+      </table>
+    </div>
+
+    <div class="card-title" style="margin-bottom:12px;">Step-by-Step Breakdown</div>
+
+    <div class="step-item open">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">1</div>
+        <div class="step-title">Plan the Topology and IP Addressing Scheme</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Before touching Packet Tracer, mapped out the full network design on paper:</p>
+        <ul>
+          <li>Identified how many VLANs were needed and what traffic each would carry</li>
+          <li>Assigned a /24 subnet to each VLAN to keep addressing simple and scalable</li>
+          <li>Planned that all inter-VLAN routing would happen at the <strong>Layer 3 switch</strong>, not the router (router-on-a-stick was tested but L3 switch is more scalable)</li>
+          <li>Decided Guest VLAN would have no route to any internal VLAN — internet-only via ACL</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">2</div>
+        <div class="step-title">Build the Physical Topology in Packet Tracer</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Constructed the network in Cisco Packet Tracer using:</p>
+        <ul>
+          <li>1x Layer 3 switch (Cisco 3560) as the core — handles inter-VLAN routing</li>
+          <li>4x Layer 2 access switches — one per floor/zone, connected to core via trunk links</li>
+          <li>1x Router — for upstream internet connectivity</li>
+          <li>End devices: PCs, IP phones, laptops, and a server in each relevant VLAN</li>
+          <li>Connected each access switch to the L3 core switch using <strong>GigabitEthernet trunk ports</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">3</div>
+        <div class="step-title">Configure VLANs and Assign Ports on All Switches</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Created VLANs on all switches and assigned ports as either access or trunk:</p>
+        <ul>
+          <li>Created VLANs 10, 20, 30, 40 in the VLAN database on every switch (<code>vlan 10</code>, <code>name DATA</code>)</li>
+          <li>Set <strong>access ports</strong> for end devices: <code>switchport mode access</code>, <code>switchport access vlan 10</code></li>
+          <li>Set <strong>trunk ports</strong> between switches: <code>switchport mode trunk</code>, allowed all VLANs across the uplinks</li>
+          <li>Configured <strong>voice VLAN</strong> on ports connecting to IP phones: <code>switchport voice vlan 20</code> alongside the data VLAN — allows a single port to carry both PC and phone traffic</li>
+          <li>Verified VLAN assignments with <code>show vlan brief</code> and <code>show interfaces trunk</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">4</div>
+        <div class="step-title">Enable Inter-VLAN Routing on the Layer 3 Switch</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Configured the L3 switch as the default gateway for all internal VLANs:</p>
+        <ul>
+          <li>Created <strong>Switched Virtual Interfaces (SVIs)</strong> for each VLAN — these act as the default gateway for devices in that VLAN</li>
+          <li>Example: <code>interface vlan 10</code> → <code>ip address 192.168.10.1 255.255.255.0</code> → <code>no shutdown</code></li>
+          <li>Enabled IP routing on the L3 switch: <code>ip routing</code></li>
+          <li>Configured a default route pointing to the router for internet traffic: <code>ip route 0.0.0.0 0.0.0.0 [router IP]</code></li>
+          <li>Verified routing table with <code>show ip route</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">5</div>
+        <div class="step-title">Configure DHCP Per VLAN</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Set up DHCP pools on the Layer 3 switch so each VLAN gets IP addresses automatically:</p>
+        <ul>
+          <li>Created a DHCP pool for each VLAN with the correct network, default gateway, and DNS server</li>
+          <li>Excluded the gateway IP and first 10 addresses from each pool (reserved for static assignment)</li>
+          <li>Example for VLAN 10: pool name DATA, network 192.168.10.0/24, default-router 192.168.10.1, dns-server 8.8.8.8</li>
+          <li>Verified a PC in VLAN 10 received a DHCP address: <code>ipconfig /all</code> in the PC terminal</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">6</div>
+        <div class="step-title">Apply ACL to Isolate Guest VLAN</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>The Guest VLAN should have internet access only — it must not be able to reach any internal resources:</p>
+        <ul>
+          <li>Created an <strong>Access Control List (ACL)</strong> on the L3 switch to deny traffic from VLAN 40 to any internal subnet (10.x, 192.168.10-30.x)</li>
+          <li>Permitted traffic from VLAN 40 to any other destination (internet via the router)</li>
+          <li>Applied the ACL inbound on the VLAN 40 SVI: <code>ip access-group GUEST_ACL in</code></li>
+          <li>Tested by pinging from a Guest PC to a Data VLAN PC — confirmed denied. Pinged 8.8.8.8 — confirmed permitted.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">7</div>
+        <div class="step-title">End-to-End Connectivity Testing</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Validated the full design using Packet Tracer's simulation mode and the PDU (packet) tool:</p>
+        <ul>
+          <li>VLAN 10 PC → VLAN 30 Server: <strong>permitted</strong> (users can access the file server)</li>
+          <li>VLAN 40 Guest → VLAN 10 PC: <strong>denied by ACL</strong> (guest isolation working)</li>
+          <li>VLAN 20 IP Phone → VLAN 10 PC: <strong>permitted</strong> (voice-to-data allowed)</li>
+          <li>All VLANs → Router (internet): <strong>permitted</strong></li>
+          <li>Used <code>show ip arp</code> and <code>ping</code> across all VLANs to verify routing table and connectivity</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">Evidence & Verification</div>
+      <div class="evidence-item">
+        <div class="ev-icon file">📁</div>
+        <div class="ev-content">
+          <div class="ev-title">Packet Tracer Project File (.pkt)</div>
+          <div class="ev-desc">The full network topology file — can be opened in Cisco Packet Tracer to verify all configurations</div>
+          <span class="ev-badge pending">File to be added to repo</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Network Topology Diagram</div>
+          <div class="ev-desc">Screenshot of the full topology in Packet Tracer showing all switches, VLANs, and connections</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">show vlan brief Output</div>
+          <div class="ev-desc">CLI output showing all VLANs and port assignments on the core switch</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Ping Test Results — Cross-VLAN and Denied</div>
+          <div class="ev-desc">Screenshots showing successful inter-VLAN pings and denied Guest VLAN pings</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="screenshot-placeholder" style="margin-top:12px;">
+        <div class="ph-title">Screenshots & .pkt file coming soon</div>
+        <p>Add to <code>/screenshots/vlan/</code> and upload <code>vlan-topology.pkt</code> to repo root</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sidebar">
+    <div class="card">
+      <div class="card-title">Skills Demonstrated</div>
+      <span class="skill-pill">VLAN Design</span>
+      <span class="skill-pill">Inter-VLAN Routing</span>
+      <span class="skill-pill">Layer 3 Switching</span>
+      <span class="skill-pill">802.1Q Trunking</span>
+      <span class="skill-pill">Access Ports</span>
+      <span class="skill-pill">Trunk Ports</span>
+      <span class="skill-pill">Voice VLAN</span>
+      <span class="skill-pill">DHCP Pools</span>
+      <span class="skill-pill">Access Control Lists</span>
+      <span class="skill-pill">Network Segmentation</span>
+      <span class="skill-pill">Cisco IOS CLI</span>
+      <span class="skill-pill">IP Routing</span>
+    </div>
+    <div class="card">
+      <div class="card-title">Tool Used</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.8;">
+        Cisco Packet Tracer 8.x<br>
+        <span style="font-size:12px;">Free from Cisco Networking Academy</span>
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">Real-World Connection</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;">This design mirrors the multi-site Cisco Meraki infrastructure managed professionally at Platinum Hospitality — 9 sites, separate Data/VoIP/Management VLANs.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Related Projects</div>
+      <a href="m365-tenant.html" style="display:block;font-size:13px;color:var(--accent);margin-bottom:6px;">→ Enterprise M365 E5 Tenant</a>
+      <a href="virtual-ad-vpn.html" style="display:block;font-size:13px;color:var(--accent);">→ Virtual AD & Site-to-Site VPN</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleStep(el) { el.closest('.step-item').classList.toggle('open'); }
+</script>
+</body>
+</html>

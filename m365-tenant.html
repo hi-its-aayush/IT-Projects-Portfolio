@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 01 — Enterprise M365 E5 Tenant | Aayush Acharya</title>
+<style>
+  :root {
+    --bg: #f8f7f4; --surface: #fff; --border: #e5e2db; --text: #1a1a1a; --muted: #6b6860;
+    --accent: #185FA5; --accent-bg: #E6F1FB; --accent-text: #0C447C;
+    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
+    --amber: #854F0B; --amber-bg: #FAEEDA; --amber-text: #633806;
+    --purple: #534AB7; --purple-bg: #EEEDFE; --purple-text: #3C3489;
+    --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-text: #085041;
+    --red: #A32D2D; --red-bg: #FCEBEB; --red-text: #791F1F;
+    --radius: 10px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  a { text-decoration: none; color: inherit; }
+
+  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 12px; }
+  .back-btn { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .back-btn:hover { text-decoration: underline; }
+  .breadcrumb { font-size: 13px; color: var(--muted); }
+
+  .hero { background: var(--accent-bg); border-bottom: 1px solid #c5d9ef; padding: 32px 24px; }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .project-num { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .hero h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; color: var(--accent-text); margin-bottom: 8px; }
+  .hero-sub { font-size: 14px; color: var(--accent-text); opacity: 0.85; margin-bottom: 16px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; }
+  .tag-blue { background: #fff; color: var(--accent-text); border: 1px solid #b8d0ea; }
+
+  .main { max-width: 860px; margin: 0 auto; padding: 28px 24px 60px; display: grid; grid-template-columns: 1fr 260px; gap: 20px; }
+  @media (max-width: 700px) { .main { grid-template-columns: 1fr; } }
+
+  .content { min-width: 0; }
+  .sidebar { display: flex; flex-direction: column; gap: 14px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); margin-bottom: 16px; }
+  .card-title { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .card p { font-size: 13px; line-height: 1.7; color: var(--muted); margin-bottom: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+
+  .recruiter-box { background: var(--teal-bg); border: 1px solid #9fd4c6; border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; }
+  .recruiter-box .label { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+  .recruiter-box p { font-size: 13px; color: var(--teal-text); line-height: 1.7; }
+
+  .steps-list { display: flex; flex-direction: column; gap: 0; }
+  .step-item { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; margin-bottom: 8px; box-shadow: var(--shadow); }
+  .step-header { padding: 13px 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; }
+  .step-header:hover { background: var(--bg); }
+  .step-num { background: var(--accent-bg); color: var(--accent-text); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .step-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .step-arrow { color: var(--muted); transition: transform 0.2s; font-size: 16px; flex-shrink: 0; }
+  .step-item.open .step-arrow { transform: rotate(90deg); }
+  .step-body { display: none; padding: 0 16px 14px 52px; font-size: 13px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); }
+  .step-item.open .step-body { display: block; }
+  .step-body code { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 12px; color: var(--purple); }
+  .step-body ul { margin: 8px 0 0 16px; }
+  .step-body ul li { margin-bottom: 4px; }
+  .step-body strong { color: var(--text); }
+
+  .evidence-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .evidence-item:last-child { border-bottom: none; }
+  .ev-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .ev-icon.verified { background: var(--green-bg); }
+  .ev-icon.screenshot { background: var(--amber-bg); }
+  .ev-content { flex: 1; }
+  .ev-title { font-size: 13px; font-weight: 600; }
+  .ev-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .ev-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-top: 4px; }
+  .ev-badge.live { background: var(--green-bg); color: var(--green-text); }
+  .ev-badge.pending { background: var(--amber-bg); color: var(--amber-text); }
+
+  .screenshot-placeholder { background: var(--bg); border: 2px dashed var(--border); border-radius: var(--radius); padding: 24px; text-align: center; margin: 8px 0; }
+  .screenshot-placeholder p { font-size: 12px; color: var(--muted); }
+  .screenshot-placeholder .ph-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+
+  .skill-pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); margin: 3px 3px 3px 0; }
+
+  .sidebar .card { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">← Back to Projects</a>
+  <span class="breadcrumb">/ Project 01</span>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="project-num">Project 01 — Cloud & Identity</div>
+    <h1>Enterprise M365 E5 Tenant & Zero Trust Infrastructure</h1>
+    <div class="hero-sub">Microsoft 365 E5 · Entra ID · Intune MDM · Windows Autopilot · Conditional Access · Zero Trust · Hyper-V · Windows Server 2022</div>
+    <div class="tags">
+      <span class="tag tag-blue">Entra ID</span>
+      <span class="tag tag-blue">Microsoft Intune</span>
+      <span class="tag tag-blue">Windows Autopilot</span>
+      <span class="tag tag-blue">Conditional Access</span>
+      <span class="tag tag-blue">Zero Trust</span>
+      <span class="tag tag-blue">MFA</span>
+      <span class="tag tag-blue">Windows Server 2022</span>
+      <span class="tag tag-blue">Hyper-V</span>
+      <span class="tag tag-blue">GPO</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="content">
+
+    <div class="recruiter-box">
+      <div class="label">What this proves — 30 second summary</div>
+      <p>This project demonstrates the ability to build and manage an enterprise Microsoft 365 environment from scratch — the same stack used by mid-to-large companies globally. It covers user identity management, device enrollment, security policy enforcement, and hybrid infrastructure simulation. These are core L1/L2 and junior sysadmin skills that directly translate to day-one productivity in an IT support role.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Project Overview</div>
+      <p>Using Microsoft's free M365 E5 developer tenant program, I built a production-grade enterprise environment from scratch. The goal was to simulate the full identity, endpoint, and security stack that a corporate IT team manages daily — going beyond just reading documentation by actually deploying and configuring each component.</p>
+      <p>The project covers three interconnected areas: <strong>Identity & Access Management</strong> (Entra ID, RBAC, MFA), <strong>Endpoint Management</strong> (Intune, Autopilot, compliance policies), and <strong>Hybrid Infrastructure</strong> (virtualised Windows Server 2022 with GPO and network segmentation via Hyper-V).</p>
+    </div>
+
+    <div class="card-title" style="margin-bottom:12px;">Step-by-Step Breakdown</div>
+
+    <div class="steps-list">
+
+      <div class="step-item open">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num">1</div>
+          <div class="step-title">Set up Microsoft 365 E5 Developer Tenant</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="step-body">
+          <p>Enrolled in the Microsoft 365 Developer Program to obtain a free E5 tenant. The E5 license includes the full suite of enterprise tools — Entra ID P2, Intune, Defender, and all M365 apps — making it a realistic simulation of a corporate environment.</p>
+          <ul>
+            <li>Created a dedicated tenant domain (e.g. <code>aayushlab.onmicrosoft.com</code>)</li>
+            <li>Assigned global admin credentials and secured with MFA immediately</li>
+            <li>Verified E5 licenses were active across all services in the M365 Admin Centre</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num">2</div>
+          <div class="step-title">Configure Entra ID — Users, Groups, and RBAC</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="step-body">
+          <p>Built out a realistic user and group structure in Entra ID to simulate a company with multiple departments.</p>
+          <ul>
+            <li>Created users across departments (IT, Finance, HR, Management) with consistent naming conventions</li>
+            <li>Built Security Groups and Microsoft 365 Groups for each department</li>
+            <li>Assigned <strong>Role-Based Access Control (RBAC)</strong> — e.g. helpdesk staff as Helpdesk Administrator, not Global Admin</li>
+            <li>Configured <strong>Dynamic Groups</strong> using attributes (e.g. department = "Finance") so users auto-join the correct group on creation</li>
+            <li>Set password policies, account lockout thresholds, and self-service password reset (SSPR)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num">3</div>
+          <div class="step-title">Enforce Zero Trust with Conditional Access & Phishing-Resistant MFA</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="step-body">
+          <p>Implemented a Zero Trust security posture — no user or device is trusted by default, access is granted only when identity and compliance conditions are met.</p>
+          <ul>
+            <li>Created Conditional Access policies: require MFA for all users, block legacy authentication protocols, restrict access to compliant devices only</li>
+            <li>Enforced <strong>phishing-resistant MFA</strong> (Microsoft Authenticator with number matching, and FIDO2 security key for admin accounts)</li>
+            <li>Configured <strong>Named Locations</strong> to allow/block access from specific countries or IP ranges</li>
+            <li>Set up <strong>Sign-in Risk policies</strong> via Entra ID Protection — automatically blocking high-risk sign-ins</li>
+            <li>Tested policies by attempting sign-ins that should be blocked and verifying Entra ID logs showed the correct deny reason</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num">4</div>
+          <div class="step-title">Deploy Microsoft Intune MDM — Device Enrollment & Compliance</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="step-body">
+          <p>Set up Intune as the Mobile Device Management platform for the simulated fleet.</p>
+          <ul>
+            <li>Configured <strong>MDM and MAM policies</strong> for both corporate and BYOD devices</li>
+            <li>Created <strong>Compliance Policies</strong> — required BitLocker encryption, minimum OS version, Defender Antivirus enabled, screen lock timeout</li>
+            <li>Built <strong>Configuration Profiles</strong> to push settings: Wi-Fi profiles, VPN configs, browser settings, and restrictions</li>
+            <li>Assigned profiles to device groups using Entra ID Dynamic Groups</li>
+            <li>Tested Remote Wipe, Remote Lock, and BitLocker key recovery via the Intune portal</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num">5</div>
+          <div class="step-title">Configure Windows Autopilot for Zero-Touch Provisioning</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="step-body">
+          <p>Configured Autopilot so that a new device shipped directly to a user can be set up without IT ever physically touching it.</p>
+          <ul>
+            <li>Created an <strong>Autopilot Deployment Profile</strong> — User-Driven mode, Azure AD joined, hide OOBE screens</li>
+            <li>Built an <strong>Enrollment Status Page (ESP)</strong> to ensure apps and policies install before the user hits the desktop</li>
+            <li>Configured required apps to install automatically on enrollment (e.g. Microsoft 365 Apps, Defender, Chrome)</li>
+            <li>Registered a test device hardware hash into Autopilot and validated the full zero-touch flow</li>
+            <li>Set up the <strong>Company Portal</strong> for optional app self-service</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num">6</div>
+          <div class="step-title">Virtualise Windows Server 2022 & Hybrid Infrastructure with Hyper-V</div>
+          <div class="step-arrow">›</div>
+        </div>
+        <div class="step-body">
+          <p>Deployed virtualised on-premises infrastructure to simulate a hybrid cloud environment alongside the Entra ID cloud tenant.</p>
+          <ul>
+            <li>Installed <strong>Hyper-V</strong> on a physical machine to host virtual servers</li>
+            <li>Deployed <strong>Windows Server 2022</strong> VM and promoted it to a Domain Controller with AD DS role</li>
+            <li>Created an AD domain (<code>aayushlab.local</code>) with OUs mirroring the Entra ID structure</li>
+            <li>Built <strong>Group Policy Objects (GPOs)</strong>: password complexity, mapped drives, desktop lockdown, software restriction policies</li>
+            <li>Configured <strong>network segmentation</strong> using Hyper-V virtual switches — separated management, domain, and test traffic</li>
+            <li>Set up <strong>Entra Connect</strong> to sync on-premises AD users to the cloud tenant (hybrid identity)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">Evidence & Verification</div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Entra ID — Users, Groups, and RBAC Configuration</div>
+          <div class="ev-desc">Screenshots of user list, group structure, and role assignments in the Entra ID portal</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Conditional Access Policies</div>
+          <div class="ev-desc">Policy list showing MFA enforcement, legacy auth block, and device compliance requirements</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Intune Device Compliance & Configuration Profiles</div>
+          <div class="ev-desc">Compliance policy settings and configuration profiles in Endpoint Manager</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Windows Autopilot Deployment Profile</div>
+          <div class="ev-desc">Autopilot profile configuration and Enrollment Status Page settings</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Hyper-V — Virtualised Windows Server 2022</div>
+          <div class="ev-desc">Hyper-V Manager showing running VMs, AD DS configuration, and GPO console</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+
+      <div class="screenshot-placeholder" style="margin-top:12px;">
+        <div class="ph-title">Screenshots coming soon</div>
+        <p>Add screenshots to the <code>/screenshots/m365/</code> folder and update the img tags above</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sidebar">
+
+    <div class="card">
+      <div class="card-title">Skills Demonstrated</div>
+      <span class="skill-pill">Microsoft Entra ID</span>
+      <span class="skill-pill">RBAC</span>
+      <span class="skill-pill">Conditional Access</span>
+      <span class="skill-pill">Zero Trust</span>
+      <span class="skill-pill">MFA / FIDO2</span>
+      <span class="skill-pill">Microsoft Intune</span>
+      <span class="skill-pill">Windows Autopilot</span>
+      <span class="skill-pill">MDM / MAM</span>
+      <span class="skill-pill">BitLocker</span>
+      <span class="skill-pill">Windows Server 2022</span>
+      <span class="skill-pill">Active Directory</span>
+      <span class="skill-pill">GPO</span>
+      <span class="skill-pill">Hyper-V</span>
+      <span class="skill-pill">Hybrid Identity</span>
+      <span class="skill-pill">Entra Connect</span>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Relevant Certifications</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;">
+        MD-102: Endpoint Administrator<br>
+        Microsoft Cloud Support Associate<br>
+        <a href="https://aayushacharya.com.au/assets/pdfs/certifications.pdf" target="_blank" style="color:var(--accent);font-size:12px;">View full certifications →</a>
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Tools Used</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.8;">
+        Microsoft 365 Admin Centre<br>
+        Microsoft Entra Admin Centre<br>
+        Microsoft Endpoint Manager<br>
+        Hyper-V Manager<br>
+        Active Directory Users & Computers<br>
+        Group Policy Management Console
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Related Projects</div>
+      <a href="virtual-ad-vpn.html" style="display:block;font-size:13px;color:var(--accent);margin-bottom:6px;">→ Virtual AD & Site-to-Site VPN</a>
+      <a href="vlan-design.html" style="display:block;font-size:13px;color:var(--accent);">→ Multi-VLAN Network Design</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleStep(el) { el.closest('.step-item').classList.toggle('open'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 03 — Virtual AD & Site-to-Site VPN | Aayush Acharya</title>
+<style>
+  :root {
+    --bg: #f8f7f4; --surface: #fff; --border: #e5e2db; --text: #1a1a1a; --muted: #6b6860;
+    --accent: #185FA5; --accent-bg: #E6F1FB; --accent-text: #0C447C;
+    --green: #3B6D11; --green-bg: #EAF3DE; --green-text: #27500A;
+    --amber: #854F0B; --amber-bg: #FAEEDA; --amber-text: #633806;
+    --purple: #534AB7; --purple-bg: #EEEDFE; --purple-text: #3C3489;
+    --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-text: #085041;
+    --radius: 10px; --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  a { text-decoration: none; color: inherit; }
+  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 12px; }
+  .back-btn { font-size: 13px; color: var(--accent); font-weight: 500; }
+  .back-btn:hover { text-decoration: underline; }
+  .breadcrumb { font-size: 13px; color: var(--muted); }
+  .hero { background: var(--purple-bg); border-bottom: 1px solid #c5bff0; padding: 32px 24px; }
+  .hero-inner { max-width: 860px; margin: 0 auto; }
+  .project-num { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--purple); margin-bottom: 8px; }
+  .hero h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; color: var(--purple-text); margin-bottom: 8px; }
+  .hero-sub { font-size: 14px; color: var(--purple-text); opacity: 0.8; margin-bottom: 16px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; background: #fff; color: var(--purple-text); border: 1px solid #c5bff0; }
+  .main { max-width: 860px; margin: 0 auto; padding: 28px 24px 60px; display: grid; grid-template-columns: 1fr 260px; gap: 20px; }
+  @media (max-width: 700px) { .main { grid-template-columns: 1fr; } }
+  .content { min-width: 0; }
+  .sidebar { display: flex; flex-direction: column; gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); margin-bottom: 16px; }
+  .card-title { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .card p { font-size: 13px; line-height: 1.7; color: var(--muted); margin-bottom: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+  .card strong { color: var(--text); }
+  .recruiter-box { background: var(--teal-bg); border: 1px solid #9fd4c6; border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; }
+  .recruiter-box .label { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+  .recruiter-box p { font-size: 13px; color: var(--teal-text); line-height: 1.7; }
+  .step-item { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; margin-bottom: 8px; box-shadow: var(--shadow); }
+  .step-header { padding: 13px 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; }
+  .step-header:hover { background: var(--bg); }
+  .step-num { background: var(--purple-bg); color: var(--purple-text); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .step-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .step-arrow { color: var(--muted); transition: transform 0.2s; font-size: 16px; flex-shrink: 0; }
+  .step-item.open .step-arrow { transform: rotate(90deg); }
+  .step-body { display: none; padding: 0 16px 14px 52px; font-size: 13px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); }
+  .step-item.open .step-body { display: block; }
+  .step-body code { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 12px; color: var(--purple); }
+  .step-body ul { margin: 8px 0 0 16px; }
+  .step-body ul li { margin-bottom: 4px; }
+  .step-body strong { color: var(--text); }
+  .evidence-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .evidence-item:last-child { border-bottom: none; }
+  .ev-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .ev-icon.screenshot { background: var(--amber-bg); }
+  .ev-content { flex: 1; }
+  .ev-title { font-size: 13px; font-weight: 600; }
+  .ev-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .ev-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-top: 4px; }
+  .ev-badge.pending { background: var(--amber-bg); color: var(--amber-text); }
+  .screenshot-placeholder { background: var(--bg); border: 2px dashed var(--border); border-radius: var(--radius); padding: 24px; text-align: center; margin: 8px 0; }
+  .screenshot-placeholder p { font-size: 12px; color: var(--muted); }
+  .screenshot-placeholder .ph-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .skill-pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); margin: 3px 3px 3px 0; }
+  .sidebar .card { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">← Back to Projects</a>
+  <span class="breadcrumb">/ Project 03</span>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="project-num">Project 03 — Cloud Infrastructure</div>
+    <h1>Virtual Active Directory & Site-to-Site VPN on Azure</h1>
+    <div class="hero-sub">Microsoft Azure · Windows Server 2022 · Active Directory · Domain Controllers · GPO · Azure VPN Gateway · Entra ID · Hybrid Cloud</div>
+    <div class="tags">
+      <span class="tag">Microsoft Azure</span>
+      <span class="tag">Windows Server 2022</span>
+      <span class="tag">Active Directory</span>
+      <span class="tag">Domain Controllers</span>
+      <span class="tag">GPO</span>
+      <span class="tag">Azure VPN Gateway</span>
+      <span class="tag">Entra ID</span>
+      <span class="tag">Hybrid Cloud</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="content">
+
+    <div class="recruiter-box">
+      <div class="label">What this proves — 30 second summary</div>
+      <p>This project demonstrates the ability to deploy and manage cloud infrastructure on Microsoft Azure — specifically virtualised Active Directory and a site-to-site VPN, which are foundational components of any hybrid enterprise environment. The skill set here is what separates a pure L1 support technician from someone capable of junior sysadmin or cloud support work.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Project Overview</div>
+      <p>Many companies run a hybrid environment — on-premises Active Directory synced to Azure/Entra ID in the cloud. This project simulates that by deploying a full AD infrastructure on Azure VMs (Windows Server 2022), then connecting it securely to a cloud-only Entra ID tenant via a site-to-site VPN.</p>
+      <p>The project covers <strong>cloud infrastructure deployment</strong> (Azure VMs, VNets, resource groups), <strong>Active Directory setup</strong> (domain controllers, OUs, GPOs), and <strong>secure connectivity</strong> (Azure VPN Gateway, local network gateway, IPSec tunnel).</p>
+    </div>
+
+    <div class="card-title" style="margin-bottom:12px;">Step-by-Step Breakdown</div>
+
+    <div class="step-item open">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">1</div>
+        <div class="step-title">Set Up Azure Resource Group and Virtual Network</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Created the foundational Azure infrastructure before deploying any VMs:</p>
+        <ul>
+          <li>Created a <strong>Resource Group</strong> to contain all project resources (easier to manage and delete as a unit)</li>
+          <li>Deployed a <strong>Virtual Network (VNet)</strong> with address space <code>10.0.0.0/16</code></li>
+          <li>Created subnets: <code>10.0.1.0/24</code> for domain controllers, <code>10.0.2.0/24</code> for member servers, and a <code>GatewaySubnet</code> (required for VPN gateway)</li>
+          <li>Configured <strong>Network Security Groups (NSGs)</strong> to allow RDP (port 3389) from a specific IP only, and block all other inbound traffic</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">2</div>
+        <div class="step-title">Deploy Windows Server 2022 VMs</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Deployed two Windows Server 2022 VMs to simulate a primary and secondary domain controller:</p>
+        <ul>
+          <li>Selected <strong>Windows Server 2022 Datacenter</strong> from the Azure Marketplace</li>
+          <li>Chose B2s VM size (2 vCPUs, 4GB RAM) — sufficient for a lab domain controller</li>
+          <li>Assigned <strong>static private IPs</strong> to both VMs — DCs must not use DHCP as other machines use their IP as the DNS server</li>
+          <li>Disabled public IPs post-setup and accessed via Azure Bastion for security</li>
+          <li>Ran Windows Update and applied all patches before promoting to DC</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">3</div>
+        <div class="step-title">Promote to Domain Controller — Active Directory Setup</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Installed the AD DS role and promoted both servers to domain controllers:</p>
+        <ul>
+          <li>Installed <strong>Active Directory Domain Services (AD DS)</strong> role via Server Manager</li>
+          <li>Promoted the first VM to a DC, creating a new forest and domain: <code>aayushlab.local</code></li>
+          <li>Promoted the second VM as an <strong>additional DC</strong> in the same domain — provides redundancy</li>
+          <li>Configured DNS on both DCs — pointed all VMs to use the primary DC's private IP as DNS server</li>
+          <li>Verified AD replication between both DCs using <code>repadmin /showrepl</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">4</div>
+        <div class="step-title">Build OU Structure and Configure GPOs</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Created a realistic organisational structure in Active Directory and applied Group Policy to control it:</p>
+        <ul>
+          <li>Built OU hierarchy: <code>aayushlab.local</code> → Departments → IT, Finance, HR, Management</li>
+          <li>Created user accounts and computer accounts in the correct OUs</li>
+          <li>Built and linked GPOs at the OU level:</li>
+          <ul>
+            <li><strong>Password Policy GPO</strong>: 12-char minimum, complexity required, 90-day expiry</li>
+            <li><strong>Desktop Lockdown GPO</strong>: removed Control Panel, restricted USB storage</li>
+            <li><strong>Drive Mapping GPO</strong>: auto-mapped network drives based on department membership</li>
+            <li><strong>Security GPO</strong>: disabled legacy SMBv1, enabled audit logging for logon events</li>
+          </ul>
+          <li>Ran <code>gpupdate /force</code> on test machines and verified policies applied with <code>gpresult /r</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">5</div>
+        <div class="step-title">Deploy Azure VPN Gateway</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Set up the Azure-side of the site-to-site VPN to connect the on-premises (simulated) network to the Azure VNet:</p>
+        <ul>
+          <li>Created an <strong>Azure VPN Gateway</strong> in the GatewaySubnet (deployment takes ~30 minutes)</li>
+          <li>Selected <strong>Route-based VPN</strong> type (required for Entra ID integration and modern IKEv2)</li>
+          <li>Created a <strong>Local Network Gateway</strong> representing the on-premises side — specified the on-prem public IP and address space</li>
+          <li>Created the <strong>VPN Connection</strong> between the two gateways using a shared key (pre-shared key)</li>
+          <li>Configured BGP for dynamic routing (optional but more realistic for enterprise simulation)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step-item">
+      <div class="step-header" onclick="toggleStep(this)">
+        <div class="step-num">6</div>
+        <div class="step-title">Integrate with Microsoft Entra ID (Hybrid Identity)</div>
+        <div class="step-arrow">›</div>
+      </div>
+      <div class="step-body">
+        <p>Configured hybrid identity so the on-premises AD users sync to the Entra ID (cloud) tenant:</p>
+        <ul>
+          <li>Installed <strong>Microsoft Entra Connect</strong> on a member server in the Azure VNet</li>
+          <li>Ran the Entra Connect wizard — selected <strong>Password Hash Synchronisation</strong> as the sign-in method</li>
+          <li>Configured the OUs to sync (excluded service accounts and test accounts from sync scope)</li>
+          <li>Verified users appeared in Entra ID admin centre with <strong>synced from on-premises</strong> badge</li>
+          <li>Tested hybrid sign-in: a user created in on-prem AD could sign into Microsoft 365 with the same credentials</li>
+          <li>Confirmed <strong>Conditional Access policies</strong> from the M365 project applied to synced users correctly</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">Evidence & Verification</div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Azure Portal — VMs, VNet, and Resource Group</div>
+          <div class="ev-desc">Overview of deployed resources in the Azure portal</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Active Directory Users & Computers — OU Structure</div>
+          <div class="ev-desc">ADUC console showing domain, OUs, and user accounts</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Group Policy Management Console — Linked GPOs</div>
+          <div class="ev-desc">GPMC showing GPOs linked to OUs and policy settings</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Azure VPN Gateway — Connected Status</div>
+          <div class="ev-desc">VPN connection showing "Connected" status in Azure portal</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="evidence-item">
+        <div class="ev-icon screenshot">📸</div>
+        <div class="ev-content">
+          <div class="ev-title">Entra Connect — Sync Status</div>
+          <div class="ev-desc">Entra Connect health showing successful sync of on-prem users to cloud</div>
+          <span class="ev-badge pending">Screenshot to be added</span>
+        </div>
+      </div>
+      <div class="screenshot-placeholder" style="margin-top:12px;">
+        <div class="ph-title">Screenshots coming soon</div>
+        <p>Add screenshots to <code>/screenshots/ad-vpn/</code> folder</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sidebar">
+    <div class="card">
+      <div class="card-title">Skills Demonstrated</div>
+      <span class="skill-pill">Microsoft Azure</span>
+      <span class="skill-pill">Azure VMs</span>
+      <span class="skill-pill">Azure VNet</span>
+      <span class="skill-pill">NSG / Firewall Rules</span>
+      <span class="skill-pill">Active Directory</span>
+      <span class="skill-pill">Domain Controllers</span>
+      <span class="skill-pill">Windows Server 2022</span>
+      <span class="skill-pill">OU Design</span>
+      <span class="skill-pill">Group Policy</span>
+      <span class="skill-pill">Azure VPN Gateway</span>
+      <span class="skill-pill">Site-to-Site VPN</span>
+      <span class="skill-pill">IPSec / IKEv2</span>
+      <span class="skill-pill">Entra Connect</span>
+      <span class="skill-pill">Hybrid Identity</span>
+      <span class="skill-pill">Password Hash Sync</span>
+    </div>
+    <div class="card">
+      <div class="card-title">Relevant Certifications</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.7;">
+        Microsoft Cloud Support Associate<br>
+        MD-102: Endpoint Administrator<br>
+        <a href="https://aayushacharya.com.au/assets/pdfs/certifications.pdf" target="_blank" style="color:var(--accent);font-size:12px;">View full certifications →</a>
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">Tools Used</div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.8;">
+        Microsoft Azure Portal<br>
+        Azure CLI<br>
+        Server Manager<br>
+        AD Users & Computers<br>
+        Group Policy Management<br>
+        Microsoft Entra Connect<br>
+        Entra Admin Centre
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">Related Projects</div>
+      <a href="m365-tenant.html" style="display:block;font-size:13px;color:var(--accent);margin-bottom:6px;">→ Enterprise M365 E5 Tenant</a>
+      <a href="vlan-design.html" style="display:block;font-size:13px;color:var(--accent);">→ Multi-VLAN Network Design</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleStep(el) { el.closest('.step-item').classList.toggle('open'); }
+</script>
+</body>
+</html>
