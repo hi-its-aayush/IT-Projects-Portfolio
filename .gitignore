@@ -1,4 +1,4 @@
-# Python scripts (dev tools, not part of the site)
+# Python scripts 
 *.py
 __pycache__/
 
