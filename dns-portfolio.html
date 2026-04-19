@@ -59,25 +59,8 @@
   .dns-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-family: monospace; font-size: 12px; }
   .dns-table td.plain { font-family: inherit; font-size: 13px; }
   .dns-table tr:last-child td { border-bottom: none; }
-  .evidence-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
-  .evidence-item:last-child { border-bottom: none; }
-  .ev-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-  .ev-icon.live { background: var(--green-bg); }
-  .ev-icon.screenshot { background: var(--amber-bg); }
-  .ev-content { flex: 1; }
-  .ev-title { font-size: 13px; font-weight: 600; }
-  .ev-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .ev-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-top: 4px; }
-  .ev-badge.live { background: var(--green-bg); color: var(--green-text); }
-  .ev-badge.pending { background: var(--amber-bg); color: var(--amber-text); }
-  .verify-link { font-size: 12px; color: var(--accent); margin-top: 4px; display: block; }
-  .verify-link:hover { text-decoration: underline; }
   .skill-pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); margin: 3px 3px 3px 0; }
-  .sidebar .card { margin-bottom: 0; }
-  .live-banner { background: var(--green-bg); border: 1px solid #b8d4a0; border-radius: var(--radius); padding: 12px 16px; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-  .live-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .live-text { font-size: 13px; color: var(--green-text); font-weight: 500; }
+  .sidebar .card { margin-bottom: 0; } 50%{opacity:0.4} }
 </style>
 </head>
 <body>
@@ -98,14 +81,12 @@
       <span class="tag">A Records</span>
       <span class="tag">CNAMEs</span>
       <span class="tag">HTTPS</span>
-      <span class="tag tag-live">Live & Verifiable Now</span>
     </div>
   </div>
 </div>
 
 <div class="main">
   <div class="content">
-    <div class="live-text">This is the only project that is fully live and independently verifiable right now — no screenshots needed.</div>
     </div>
 
     <div class="recruiter-box">
@@ -238,35 +219,8 @@
       </div>
     </div>
 
-      <div class="evidence-item">
-        <div class="ev-icon live">🔍</div>
-        <div class="ev-content">
-          <div class="ev-title">DNS Records — A Records and CNAMEs</div>
-          <div class="ev-desc">All DNS records are publicly queryable using MxToolbox or any DNS lookup tool</div>
-          <span class="ev-badge live">Verifiable Now</span>
-          <a href="https://mxtoolbox.com/SuperTool.aspx?action=a%3aaayushacharya.com.au" target="_blank" class="verify-link">Check A records on MxToolbox →</a>
-        </div>
-      </div>
 
-      <div class="evidence-item">
-        <div class="ev-icon live">🔒</div>
-        <div class="ev-content">
-          <div class="ev-title">HTTPS / SSL Certificate</div>
-          <div class="ev-desc">SSL certificate is active and valid on all three domains</div>
-          <span class="ev-badge live">Verifiable Now</span>
-          <a href="https://www.ssllabs.com/ssltest/analyze.html?d=aayushacharya.com.au" target="_blank" class="verify-link">Run SSL test on SSL Labs →</a>
-        </div>
-      </div>
 
-      <div class="evidence-item">
-        <div class="ev-icon live">💻</div>
-        <div class="ev-content">
-          <div class="ev-title">GitHub Repository — Source Code</div>
-          <div class="ev-desc">The full site source code is publicly available on GitHub</div>
-          <span class="ev-badge live">Verifiable Now</span>
-          <a href="https://github.com/hi-its-aayush" target="_blank" class="verify-link">View GitHub profile →</a>
-        </div>
-      </div>
 
     </div>
 
@@ -289,8 +243,7 @@
       <span class="skill-pill">Web Deployment</span>
     </div>
     <div class="card">
-      <div class="card-title">Verify Right Now</div>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">No screenshots needed — check these live:</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Verify live:</p>
       <a href="https://aayushacharya.com.au" target="_blank" style="display:block;font-size:13px;color:var(--accent);margin-bottom:6px;">→ aayushacharya.com.au</a>
       <a href="https://mxtoolbox.com/SuperTool.aspx?action=a%3aaayushacharya.com.au" target="_blank" style="display:block;font-size:13px;color:var(--accent);margin-bottom:6px;">→ DNS lookup (MxToolbox)</a>
       <a href="https://github.com/hi-its-aayush" target="_blank" style="display:block;font-size:13px;color:var(--accent);">→ GitHub source code</a>

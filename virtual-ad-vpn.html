@@ -53,18 +53,6 @@
   .step-body ul { margin: 8px 0 0 16px; }
   .step-body ul li { margin-bottom: 4px; }
   .step-body strong { color: var(--text); }
-  .evidence-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
-  .evidence-item:last-child { border-bottom: none; }
-  .ev-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
-  .ev-icon.screenshot { background: var(--amber-bg); }
-  .ev-content { flex: 1; }
-  .ev-title { font-size: 13px; font-weight: 600; }
-  .ev-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .ev-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-top: 4px; }
-  .ev-badge.pending { background: var(--amber-bg); color: var(--amber-text); }
-  .screenshot-placeholder { background: var(--bg); border: 2px dashed var(--border); border-radius: var(--radius); padding: 24px; text-align: center; margin: 8px 0; }
-  .screenshot-placeholder p { font-size: 12px; color: var(--muted); }
-  .screenshot-placeholder .ph-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
   .skill-pill { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); margin: 3px 3px 3px 0; }
   .sidebar .card { margin-bottom: 0; }
 </style>
@@ -222,42 +210,6 @@
         </ul>
       </div>
     </div>
-      <div class="evidence-item">
-        <div class="ev-icon screenshot">📸</div>
-        <div class="ev-content">
-          <div class="ev-title">Active Directory Users & Computers — OU Structure</div>
-          <div class="ev-desc">ADUC console showing domain, OUs, and user accounts</div>
-          <span class="ev-badge pending">Screenshot to be added</span>
-        </div>
-      </div>
-      <div class="evidence-item">
-        <div class="ev-icon screenshot">📸</div>
-        <div class="ev-content">
-          <div class="ev-title">Group Policy Management Console — Linked GPOs</div>
-          <div class="ev-desc">GPMC showing GPOs linked to OUs and policy settings</div>
-          <span class="ev-badge pending">Screenshot to be added</span>
-        </div>
-      </div>
-      <div class="evidence-item">
-        <div class="ev-icon screenshot">📸</div>
-        <div class="ev-content">
-          <div class="ev-title">Azure VPN Gateway — Connected Status</div>
-          <div class="ev-desc">VPN connection showing "Connected" status in Azure portal</div>
-          <span class="ev-badge pending">Screenshot to be added</span>
-        </div>
-      </div>
-      <div class="evidence-item">
-        <div class="ev-icon screenshot">📸</div>
-        <div class="ev-content">
-          <div class="ev-title">Entra Connect — Sync Status</div>
-          <div class="ev-desc">Entra Connect health showing successful sync of on-prem users to cloud</div>
-          <span class="ev-badge pending">Screenshot to be added</span>
-        </div>
-      </div>
-      <div class="screenshot-placeholder" style="margin-top:12px;">
-        <div class="ph-title">Screenshots coming soon</div>
-        <p>Add screenshots to <code>/screenshots/ad-vpn/</code> folder</p>
-      </div>
     </div>
 
   </div>
