@@ -1,0 +1,10 @@
+# Python scripts (dev tools, not part of the site)
+*.py
+__pycache__/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+*.code-workspace
