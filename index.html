@@ -1,166 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aayush Acharya — IT Projects Portfolio</title>
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="portfolio-style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aayush Acharya — IT Projects Portfolio</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="portfolio-style.css">
+
+  <style>
+    /* ── Override portfolio-style.css with site design tokens ── */
+    :root {
+      --bg-main:    #0a0a0a;
+      --bg-card:    #171717;
+      --bg-hover:   #262626;
+      --text-main:  #ededed;
+      --text-muted: #a1a1aa;
+      --accent:     #3b82f6;
+      --accent-glow: rgba(59,130,246,0.12);
+      --border:     #333333;
+      --radius:     12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--text-main); text-decoration: none; transition: 0.2s; }
+    a:hover { color: var(--accent); }
+
+    .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      padding: 1rem 0;
+    }
+
+    .nav-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .nav-hub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.75rem;
+      border-radius: 50px;
+      white-space: nowrap;
+      transition: 0.2s;
+    }
+    .nav-hub:hover { border-color: var(--accent); color: var(--accent); }
+
+    .nav-logo { font-weight: 700; font-size: 1.05rem; color: var(--text-main); }
+    .nav-logo:hover { color: var(--text-main); }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      align-items: center;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .hero-eyebrow::before { content: '// '; opacity: 0.6; }
+
+    .hero-name {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-role {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-role .sep { margin: 0 0.5rem; opacity: 0.4; }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-link {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem;
+      border-radius: 50px;
+      transition: 0.2s;
+    }
+    .hero-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Stats row */
+    .stats {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main { padding: 3rem 0 5rem; }
+
+    /* Recruiter note */
+    .recruiter-note {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+    .recruiter-note strong { color: var(--text-main); }
+
+    /* KB highlight */
+    .kb-highlight {
+      background: var(--bg-card);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .kb-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: #27c93f;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .kb-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .kb-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 520px;
+    }
+
+    .kb-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    .kb-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: #27c93f;
+      background: rgba(39,201,63,0.1);
+      border: 1px solid rgba(39,201,63,0.3);
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+    .section-label::before { content: '// '; color: var(--accent); }
+
+    /* ── PROJECT CARDS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--text-main);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(59,130,246,0.07) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      background: var(--bg-hover);
+      box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 8px 24px rgba(0,0,0,0.4);
+      color: var(--text-main);
+    }
+
+    .project-card:hover::before { opacity: 1; }
+
+    .project-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+
+    .project-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .project-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 4px;
+      background: #262626;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .tag-accent {
+      background: rgba(59,130,246,0.1);
+      color: var(--accent);
+      border-color: rgba(59,130,246,0.25);
+    }
+
+    .tag-green {
+      background: rgba(39,201,63,0.08);
+      color: #27c93f;
+      border-color: rgba(39,201,63,0.2);
+    }
+
+    .tag-purple {
+      background: rgba(167,139,250,0.08);
+      color: #a78bfa;
+      border-color: rgba(167,139,250,0.2);
+    }
+
+    .tag-amber {
+      background: rgba(251,191,36,0.08);
+      color: #fbbf24;
+      border-color: rgba(251,191,36,0.2);
+    }
+
+    .project-cta {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .project-card:hover .project-cta { color: var(--accent); }
+
+    /* ── SKILLS GRID ── */
+    .skills-section { margin-top: 1rem; }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .skill-item {
+      font-size: 0.8rem;
+      padding: 0.35rem 0.9rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .skill-item:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+    }
+
+    /* ── VIEW BUTTON ── */
+    .view-btn {
+      display: inline-block;
+      padding: 0.55rem 1.2rem;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .view-btn:hover { opacity: 0.85; color: #fff; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links .hide-mobile { display: none; }
+      .kb-highlight { flex-direction: column; }
+      .kb-actions { align-items: flex-start; }
+      .stats { gap: 1.5rem; }
+    }
+  </style>
 </head>
 <body>
 
-<header class="topbar">
-  <div class="topbar-brand">
-    <a href="https://aayush.com.au" style="font-size:0.8rem; color:var(--text-muted); text-decoration:none; border:1px solid var(--border); padding:0.3rem 0.75rem; border-radius:50px; transition:0.2s; white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">← Hub</a>
-    <span class="prompt">$</span>
-    <span>aayush-acharya</span>
-    <span class="cursor"></span>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-content">
+    <div class="nav-left">
+      <a href="https://aayush.com.au" class="nav-hub">← Hub</a>
+      <a href="#" class="nav-logo">Aayush Acharya</a>
+    </div>
+    <div class="nav-links">
+      <a href="#projects" class="hide-mobile">Projects</a>
+      <a href="#skills" class="hide-mobile">Skills</a>
+      <a href="https://aayushacharya.com.au" target="_blank" class="hide-mobile">Portfolio ↗</a>
+      <a href="mailto:aayush@aayush.com.au">Contact</a>
+    </div>
   </div>
-  <nav class="topbar-nav">
-    <a href="#projects" class="hide-mobile">Projects</a>
-    <a href="#skills" class="hide-mobile">Skills</a>
-    <a href="https://aayushacharya.com.au" target="_blank" class="hide-mobile">Portfolio &#8599;</a>
-    <a href="mailto:aayush@aayush.com.au">Contact</a>
-  </nav>
-</header>
+</nav>
 
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow-index">IT Projects Portfolio</div>
+  <div class="container">
+    <div class="hero-eyebrow">IT Projects Portfolio</div>
     <div class="hero-name">Aayush Acharya</div>
     <div class="hero-role">
       AV &amp; Technical Support Analyst
-      <span class="sep">&#183;</span>
+      <span class="sep">·</span>
       Level 1/2 IT Support
-      <span class="sep">&#183;</span>
+      <span class="sep">·</span>
       Sydney, NSW
     </div>
     <div class="hero-links">
-      <a class="hero-link" href="https://aayushacharya.com.au" target="_blank">&#127760; aayushacharya.com.au</a>
-      <a class="hero-link" href="https://linkedin.com/in/aayushacharya" target="_blank">&#128101; LinkedIn</a>
-      <a class="hero-link" href="https://github.com/hi-its-aayush" target="_blank">&#128196; GitHub</a>
-      <a class="hero-link" href="mailto:aayush@aayush.com.au">&#9993; aayush@aayush.com.au</a>
+      <a class="hero-link" href="https://aayushacharya.com.au" target="_blank">🌐 aayushacharya.com.au</a>
+      <a class="hero-link" href="https://linkedin.com/in/aayushacharya" target="_blank">👤 LinkedIn</a>
+      <a class="hero-link" href="https://github.com/hi-its-aayush" target="_blank">📄 GitHub</a>
+      <a class="hero-link" href="mailto:aayush@aayush.com.au">✉ aayush@aayush.com.au</a>
     </div>
     <div class="stats">
-      <div class="stat"><span class="stat-num">4</span><div class="stat-label">Projects</div></div>
-      <div class="stat"><span class="stat-num">12+</span><div class="stat-label">Technologies</div></div>
-      <div class="stat"><span class="stat-num">2+</span><div class="stat-label">Years experience</div></div>
-      <div class="stat"><span class="stat-num">153</span><div class="stat-label">KB articles live</div></div>
+      <div class="stat">
+        <span class="stat-num">4</span>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">12+</span>
+        <div class="stat-label">Technologies</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">2+</span>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">153</span>
+        <div class="stat-label">KB Articles Live</div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- MAIN -->
 <div class="main">
+  <div class="container">
 
-  <div class="recruiter-note">
-    <strong>&#9888; For Recruiters</strong>
-    Each project page includes a plain-English summary of what was built and why it matters, followed by the technical detail. The DNS/Portfolio project is fully live and verifiable right now.
-  </div>
-
-  <div class="kb-highlight">
-    <div class="kb-highlight-text">
-      <div class="kb-highlight-eyebrow">&#9679; Live tool</div>
-      <div class="kb-highlight-title">IT Knowledge Base — 153 articles</div>
-      <div class="kb-highlight-desc">A searchable L1/L2 troubleshooting wiki built in vanilla HTML/JS. Covers Accounts, Exchange, Teams, Windows, Intune/MDM, Security IR, and more.</div>
+    <!-- Recruiter note -->
+    <div class="recruiter-note">
+      <strong>⚠ For Recruiters</strong> &nbsp;—&nbsp;
+      Each project page includes a plain-English summary of what was built and why it matters, followed by the technical detail. The DNS/Portfolio project is fully live and verifiable right now.
     </div>
-    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
-      <span class="kb-pill">&#9679; Live on GitHub Pages</span>
-      <a class="view-btn" href="https://hi-its-aayush.github.io/Basic-IT-TroubleshootingKB/" target="_blank">Open Knowledge Base</a>
+
+    <!-- KB highlight -->
+    <div class="kb-highlight">
+      <div>
+        <div class="kb-eyebrow">● Live Tool</div>
+        <div class="kb-title">IT Knowledge Base — 153 Articles</div>
+        <div class="kb-desc">A searchable L1/L2 troubleshooting wiki built in vanilla HTML/JS. Covers Accounts, Exchange, Teams, Windows, Intune/MDM, Security IR, and more.</div>
+      </div>
+      <div class="kb-actions">
+        <span class="kb-pill">● Live on GitHub Pages</span>
+        <a class="view-btn" href="https://hi-its-aayush.github.io/Basic-IT-TroubleshootingKB/" target="_blank">Open Knowledge Base</a>
+      </div>
     </div>
-  </div>
 
-  <div id="projects" class="section-label">Technical Projects &amp; Home Lab</div>
+    <!-- Projects -->
+    <div id="projects" class="section-label">Technical Projects &amp; Home Lab</div>
 
-  <div class="projects">
+    <div class="projects-grid">
 
-    <a href="m365-tenant.html" class="project-card c-blue">
-      <div class="project-icon">&#9729;&#65039;</div>
-      <div class="project-num">Project 01</div>
-      <div class="project-title">Enterprise M365 E5 Tenant &amp; Zero Trust Infrastructure</div>
-      <div class="project-desc">Built a production-grade Microsoft 365 E5 environment with Entra ID, Intune MDM, Zero Trust Conditional Access, and phishing-resistant MFA — simulating a full enterprise identity and endpoint management stack.</div>
-      <div class="project-tags">
-        <span class="tag tag-blue">Entra ID</span>
-        <span class="tag tag-blue">Intune</span>
-        <span class="tag tag-blue">Autopilot</span>
-        <span class="tag tag-teal">Zero Trust</span>
-        <span class="tag tag-teal">Conditional Access</span>
-      </div>
-      <div class="view-btn">View Project</div>
-    </a>
+      <a href="m365-tenant.html" class="project-card">
+        <div class="project-icon">☁️</div>
+        <div class="project-num">Project 01</div>
+        <div class="project-title">Enterprise M365 E5 Tenant &amp; Zero Trust Infrastructure</div>
+        <div class="project-desc">Built a production-grade Microsoft 365 E5 environment with Entra ID, Intune MDM, Zero Trust Conditional Access, and phishing-resistant MFA — simulating a full enterprise identity and endpoint management stack.</div>
+        <div class="project-tags">
+          <span class="tag tag-accent">Entra ID</span>
+          <span class="tag tag-accent">Intune</span>
+          <span class="tag tag-accent">Autopilot</span>
+          <span class="tag">Zero Trust</span>
+          <span class="tag">Conditional Access</span>
+        </div>
+        <div class="project-cta">View Project →</div>
+      </a>
 
-    <a href="vlan-design.html" class="project-card c-green">
-      <div class="project-icon">&#127760;</div>
-      <div class="project-num">Project 02</div>
-      <div class="project-title">Multi-VLAN Network Design</div>
-      <div class="project-desc">Designed and validated a multi-VLAN enterprise network topology in Cisco Packet Tracer — covering inter-VLAN routing, 802.1Q trunking, Layer 3 switching, and per-VLAN DHCP across segmented traffic zones.</div>
-      <div class="project-tags">
-        <span class="tag tag-green">Cisco</span>
-        <span class="tag tag-green">VLANs</span>
-        <span class="tag tag-green">L3 Switching</span>
-        <span class="tag tag-green">802.1Q</span>
-      </div>
-      <div class="view-btn">View Project</div>
-    </a>
+      <a href="vlan-design.html" class="project-card">
+        <div class="project-icon">🌐</div>
+        <div class="project-num">Project 02</div>
+        <div class="project-title">Multi-VLAN Network Design</div>
+        <div class="project-desc">Designed and validated a multi-VLAN enterprise network topology in Cisco Packet Tracer — covering inter-VLAN routing, 802.1Q trunking, Layer 3 switching, and per-VLAN DHCP across segmented traffic zones.</div>
+        <div class="project-tags">
+          <span class="tag tag-green">Cisco</span>
+          <span class="tag tag-green">VLANs</span>
+          <span class="tag tag-green">L3 Switching</span>
+          <span class="tag tag-green">802.1Q</span>
+        </div>
+        <div class="project-cta">View Project →</div>
+      </a>
 
-    <a href="virtual-ad-vpn.html" class="project-card c-purple">
-      <div class="project-icon">&#128272;</div>
-      <div class="project-num">Project 03</div>
-      <div class="project-title">Virtual Active Directory &amp; Site-to-Site VPN on Azure</div>
-      <div class="project-desc">Deployed a virtual Active Directory environment on Azure using Windows Server 2022 VMs, configured domain controllers, OUs, and GPOs, then built a site-to-site VPN integrated with Microsoft Entra ID.</div>
-      <div class="project-tags">
-        <span class="tag tag-blue">Azure</span>
-        <span class="tag tag-blue">Active Directory</span>
-        <span class="tag tag-purple">Windows Server</span>
-        <span class="tag tag-purple">GPO</span>
-        <span class="tag tag-teal">VPN</span>
-      </div>
-      <div class="view-btn">View Project</div>
-    </a>
+      <a href="virtual-ad-vpn.html" class="project-card">
+        <div class="project-icon">🔐</div>
+        <div class="project-num">Project 03</div>
+        <div class="project-title">Virtual Active Directory &amp; Site-to-Site VPN on Azure</div>
+        <div class="project-desc">Deployed a virtual Active Directory environment on Azure using Windows Server 2022 VMs, configured domain controllers, OUs, and GPOs, then built a site-to-site VPN integrated with Microsoft Entra ID.</div>
+        <div class="project-tags">
+          <span class="tag tag-accent">Azure</span>
+          <span class="tag tag-accent">Active Directory</span>
+          <span class="tag tag-purple">Windows Server</span>
+          <span class="tag tag-purple">GPO</span>
+          <span class="tag">VPN</span>
+        </div>
+        <div class="project-cta">View Project →</div>
+      </a>
 
-    <a href="dns-portfolio.html" class="project-card c-amber">
-      <div class="project-icon">&#127757;</div>
-      <div class="project-num">Project 04</div>
-      <div class="project-title">Portfolio Website &amp; DNS Infrastructure</div>
-      <div class="project-desc">Built and deployed a personal portfolio site on GitHub Pages, then configured DNS across three live domains — A records, CNAMEs, and HTTPS — demonstrating practical DNS management and web infrastructure skills.</div>
-      <div class="project-tags">
-        <span class="tag tag-amber">DNS</span>
-        <span class="tag tag-amber">GitHub Pages</span>
-        <span class="tag tag-amber">HTTPS</span>
-        <span class="tag tag-green">Live &amp; Verifiable</span>
-      </div>
-      <div class="view-btn">View Project</div>
-    </a>
+      <a href="dns-portfolio.html" class="project-card">
+        <div class="project-icon">🌍</div>
+        <div class="project-num">Project 04</div>
+        <div class="project-title">Multi-Domain DNS Infrastructure</div>
+        <div class="project-desc">Deployed DNS across three live production domains with A records, CNAMEs, and HTTPS — including subdomain routing for six independently hosted services under a single root domain. Fully live and verifiable.</div>
+        <div class="project-tags">
+          <span class="tag tag-amber">DNS</span>
+          <span class="tag tag-amber">Cloudflare</span>
+          <span class="tag tag-amber">HTTPS</span>
+          <span class="tag tag-green">Live &amp; Verifiable</span>
+        </div>
+        <div class="project-cta">View Project →</div>
+      </a>
 
-  </div>
-
-  <div id="skills" class="skills-section">
-    <div class="section-label">Skills Demonstrated Across All Projects</div>
-    <div class="skills-grid">
-      <div class="skill-item">Microsoft Entra ID</div>
-      <div class="skill-item">Microsoft Intune</div>
-      <div class="skill-item">Windows Autopilot</div>
-      <div class="skill-item">Conditional Access</div>
-      <div class="skill-item">Zero Trust</div>
-      <div class="skill-item">Active Directory</div>
-      <div class="skill-item">Windows Server 2022</div>
-      <div class="skill-item">Group Policy (GPO)</div>
-      <div class="skill-item">Microsoft Azure</div>
-      <div class="skill-item">Azure VPN Gateway</div>
-      <div class="skill-item">VLAN Design</div>
-      <div class="skill-item">Inter-VLAN Routing</div>
-      <div class="skill-item">Cisco Packet Tracer</div>
-      <div class="skill-item">802.1Q Trunking</div>
-      <div class="skill-item">DNS Management</div>
-      <div class="skill-item">GitHub Pages</div>
-      <div class="skill-item">HTTPS / SSL</div>
-      <div class="skill-item">Hybrid Cloud</div>
-      <div class="skill-item">PowerShell</div>
-      <div class="skill-item">Incident Response</div>
     </div>
-  </div>
 
+    <!-- Skills -->
+    <div id="skills" class="skills-section">
+      <div class="section-label">Skills Demonstrated Across All Projects</div>
+      <div class="skills-grid">
+        <div class="skill-item">Microsoft Entra ID</div>
+        <div class="skill-item">Microsoft Intune</div>
+        <div class="skill-item">Windows Autopilot</div>
+        <div class="skill-item">Conditional Access</div>
+        <div class="skill-item">Zero Trust</div>
+        <div class="skill-item">Active Directory</div>
+        <div class="skill-item">Windows Server 2022</div>
+        <div class="skill-item">Group Policy (GPO)</div>
+        <div class="skill-item">Microsoft Azure</div>
+        <div class="skill-item">Azure VPN Gateway</div>
+        <div class="skill-item">VLAN Design</div>
+        <div class="skill-item">Inter-VLAN Routing</div>
+        <div class="skill-item">Cisco Packet Tracer</div>
+        <div class="skill-item">802.1Q Trunking</div>
+        <div class="skill-item">DNS Management</div>
+        <div class="skill-item">Cloudflare</div>
+        <div class="skill-item">GitHub Pages</div>
+        <div class="skill-item">HTTPS / SSL</div>
+        <div class="skill-item">Hybrid Cloud</div>
+        <div class="skill-item">PowerShell</div>
+        <div class="skill-item">Incident Response</div>
+      </div>
+    </div>
+
+  </div>
 </div>
+
 </body>
 </html>
