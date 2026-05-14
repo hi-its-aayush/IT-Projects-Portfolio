@@ -28,7 +28,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 15px; scroll-behavior: smooth; }
+html { font-size: 16px; scroll-behavior: smooth; }
 body { font-family: var(--sans); background: var(--bg-main); color: var(--text-main); line-height: 1.6; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 a { text-decoration: none; color: inherit; transition: color .15s; }
 
@@ -110,11 +110,11 @@ a { text-decoration: none; color: inherit; transition: color .15s; }
   margin-bottom: 10px;
 }
 .page-sub {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text-dim);
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text-muted);
   margin-bottom: 16px;
-  line-height: 1.9;
+  line-height: 1.7;
 }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .tag {
@@ -179,10 +179,11 @@ a { text-decoration: none; color: inherit; transition: color .15s; }
   color: var(--text-dim);
   margin-bottom: 12px;
 }
-.card p { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-bottom: 8px; }
+.card p { font-size: 13px; color: var(--text-main); line-height: 1.75; margin-bottom: 8px; }
 .card p:last-child { margin-bottom: 0; }
 .card strong { color: var(--text-main); }
 .sidebar .card { margin-bottom: 0; }
+.sidebar .card p { color: var(--text-muted); font-size: 13px; }
 
 /* Recruiter highlight box */
 .recruiter-box {
@@ -201,7 +202,7 @@ a { text-decoration: none; color: inherit; transition: color .15s; }
   color: var(--green);
   margin-bottom: 6px;
 }
-.recruiter-box p { font-size: 13px; color: #86efac; line-height: 1.7; margin-bottom: 0; }
+.recruiter-box p { font-size: 13px; color: var(--text-main); line-height: 1.7; margin-bottom: 0; }
 
 /* --- 7. SECTION LABEL --- */
 .section-label {
@@ -264,7 +265,7 @@ a { text-decoration: none; color: inherit; transition: color .15s; }
   display: none;
   padding: 0 16px 14px 52px;
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--text-main);
   line-height: 1.75;
   border-top: 1px solid var(--border);
 }
@@ -279,9 +280,9 @@ a { text-decoration: none; color: inherit; transition: color .15s; }
   color: var(--accent);
 }
 .step-body ul { margin: 8px 0 0 16px; }
-.step-body ul li { margin-bottom: 5px; }
+.step-body ul li { margin-bottom: 6px; color: var(--text-main); }
 .step-body strong { color: var(--text-main); }
-.step-body p { margin-top: 8px; }
+.step-body p { margin-top: 8px; color: var(--text-main); }
 
 /* Tip / Warn callouts */
 .tip {
@@ -291,7 +292,7 @@ a { text-decoration: none; color: inherit; transition: color .15s; }
   border-radius: 0 6px 6px 0;
   margin-top: 10px;
   font-size: 12px;
-  color: #86efac;
+  color: var(--text-main);
 }
 .warn {
   background: var(--amber-glow);
@@ -300,7 +301,7 @@ a { text-decoration: none; color: inherit; transition: color .15s; }
   border-radius: 0 6px 6px 0;
   margin-top: 10px;
   font-size: 12px;
-  color: #fcd34d;
+  color: var(--text-main);
 }
 
 /* --- 9. PROOF / SCREENSHOTS --- */
@@ -320,7 +321,7 @@ a { text-decoration: none; color: inherit; transition: color .15s; }
 .proof-img-wrap p {
   font-family: var(--mono);
   font-size: 10px;
-  color: var(--text-dim);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: .06em;
   margin-bottom: 6px;
